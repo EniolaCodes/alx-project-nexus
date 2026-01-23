@@ -16,6 +16,7 @@ export const strongPasswordSchema = z
 // Base schema for all users
 export const baseUserSchema = z.object({
   email: z
+    .string()
     .email({ message: "Invalid email address" })
     .nonempty({ message: "Email is required" }),
   password: strongPasswordSchema,
@@ -27,7 +28,9 @@ export const loginSchema = baseUserSchema;
 // Signup schema (adds confirmPassword, checks match)
 export const signupSchema = baseUserSchema
   .extend({
-    confirmPassword: strongPasswordSchema,
+    confirmPassword: z
+      .string()
+      .nonempty({ message: "Confirm Password is required" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],

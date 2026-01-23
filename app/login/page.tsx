@@ -2,7 +2,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -61,13 +60,15 @@ const Login = () => {
   };
 
   return (
-    <section className="w-screen mx-auto sm:h-screen flex flex-col sm:justify-center sm:items-center sm:bg-primary sm:py-0 pt-10">
+    <section className="bg-gray-100 w-screen mx-auto sm:h-screen flex flex-col sm:justify-center sm:items-center sm:bg-primary sm:py-0 pt-10">
       <div className="sm:pb-10 pb-5 sm:px-0 px-5">
         <Image src={logo} alt="logo" className="sm:w-full h-auto" priority />
       </div>
       <div className="border bg-white flex flex-col gap-2 sm:w-119 sm:h-121.5 sm:p-10 px-5 py-12 rounded-md border-white">
-        <h2 className="sm:text-[32px] text-2xl font-bold">Login</h2>
-        <h3 className="text-base text-gray">
+        <h2 className="sm:text-[32px] text-2xl text-[#333333] font-bold">
+          Login
+        </h2>
+        <h3 className="text-base text-[#737373]">
           Add your details below to get back into the{" "}
           <br className="sm:hidden block" /> app
         </h3>
@@ -79,7 +80,7 @@ const Login = () => {
           <div>
             <label
               htmlFor="email"
-              className={`text-xs ${errors.email ? "text-[#FF3939]" : "text-[#FAFAFA]"}`}
+              className={`text-xs ${errors.email ? "text-[#FF3939]" : "text-[#737373]"}`}
             >
               Email address
             </label>
@@ -91,7 +92,7 @@ const Login = () => {
                 className={`text-base ${
                   errors.email
                     ? "text-[#FF3939] border w-full rounded-md py-3 px-10 outline-none"
-                    : "border w-full rounded-md py-3 px-10 text-base text-[#FAFAFA] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
+                    : "border w-full rounded-md py-3 px-10 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
                 }`}
                 {...register("email")}
               />
@@ -109,7 +110,7 @@ const Login = () => {
           <div>
             <label
               htmlFor="password"
-              className={`text-xs ${errors.password ? "text-[#FF3939]" : "text-[#FAFAFA]"}`}
+              className={`text-xs ${errors.password ? "text-[#FF3939]" : "text-[#737373]"}`}
             >
               Password
             </label>
@@ -121,7 +122,7 @@ const Login = () => {
                 className={`text-base ${
                   errors.password
                     ? "text-[#FF3939] border w-full rounded-md py-3 px-10 outline-none"
-                    : "border w-full rounded-md py-3 px-10 text-base text-[#FAFAFA] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
+                    : "border w-full rounded-md py-3 px-10 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
                 }`}
                 {...register("password")}
               />
