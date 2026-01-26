@@ -1,7 +1,9 @@
-import React from "react";
+"use client";
+
+import CustomizeLinks from "@/components/customize/CustomizeLinks";
 
 const LinkPage = () => {
-  return <div>LinkPage</div>;
+  return <CustomizeLinks />;
 };
 
 export default LinkPage;
