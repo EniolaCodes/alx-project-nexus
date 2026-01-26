@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+import LinkPage from "@/components/link/LinkPage";
+
 export default function Home() {
-  return <div className="">Link Sharing App</div>;
+  return <LinkPage />;
 }
