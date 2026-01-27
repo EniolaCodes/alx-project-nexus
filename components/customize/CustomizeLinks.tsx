@@ -275,10 +275,11 @@ const CustomizeLinks: NextPage = () => {
 
         <p className="text-gray-700 mt-4">Please log in to continue.</p>
 
-        <Link href="/login" legacyBehavior>
-          <a className="text-[#FF633C] underline mt-2 font-medium">
-            Go to Login Page
-          </a>
+        <Link
+          href="/login"
+          className="text-[#FF633C] underline mt-2 font-medium"
+        >
+          Go to Login Page
         </Link>
       </div>
     );

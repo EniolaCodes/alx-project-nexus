@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { auth, db } from "@/app/firebase/config";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { setDoc, doc } from "firebase/firestore";
 import logo from "@/public/assets/images/logo.svg";
 import lock from "@/public/assets/images/lock.svg";
 import mail from "@/public/assets/images/mail.svg";
@@ -58,7 +59,9 @@ const Register = () => {
             toast.error("Invalid email address");
             break;
           case "auth/weak-password":
-            toast.error("Password should be at least 6 characters");
+            toast.error(
+              "Password must be at least 8 characters with uppercase, number, and special character",
+            );
             break;
           case "auth/email-already-in-use":
             toast.error("Email already in use");
