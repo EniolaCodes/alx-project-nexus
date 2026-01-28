@@ -43,7 +43,7 @@ const Register = () => {
           email: user.email,
           createdAt: new Date(),
         });
-        toast.success("Sign-up successful! Redirecting to sign-in...");
+        toast.success("Sign-up successful! Redirecting to login...");
         reset();
         setTimeout(() => {
           window.location.href = "/login";
