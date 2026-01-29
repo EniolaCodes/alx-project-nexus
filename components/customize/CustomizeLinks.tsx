@@ -21,10 +21,10 @@ import Image from "next/image";
 import github from "@/public/assets/images/github.svg";
 import youtube from "@/public/assets/images/youtube.svg";
 import chain from "@/public/assets/images/link_2.svg";
-import linkedin from "@/public/assets/images/linkedin2.svg";
+import linkedin from "@/public/assets/images/linkedin.svg";
 import fingerImage from "@/public/assets/images/fingerImage.svg";
-import facebook from "@/public/assets/images/facebook2.svg";
-import { toast, Toaster } from "react-hot-toast";
+import facebook from "@/public/assets/images/facebook.svg";
+import { toast } from "react-hot-toast";
 import { signOut } from "firebase/auth";
 import Link from "next/link";
 
@@ -149,10 +149,12 @@ const CustomizeLinks: NextPage = () => {
 
   const isValidUrl = (platform: string, url: string) => {
     const regexes: Record<string, RegExp> = {
-      GitHub: /^https:\/\/github\.com\/.+/,
-      LinkedIn: /^https:\/\/(www\.)?linkedin\.com\/in\/.+/,
-      Facebook: /^https:\/\/(www\.)?facebook\.com\/.+/,
-      YouTube: /^https:\/\/(www\.)?youtube\.com\/(channel|user)\/.+/,
+      GitHub: /^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+\/?$/,
+      LinkedIn: /^https:\/\/(www\.)?linkedin\.com\/in\/[\w\-\.]+\/?$/,
+      Facebook:
+        /^https:\/\/(www\.)?facebook\.com\/(profile\.php\?id=\d+|[A-Za-z0-9\.]+)\/?$/,
+      YouTube:
+        /^https:\/\/(?:[A-Za-z0-9-]+\.)?youtube\.com\/(?:@?[A-Za-z0-9_\-\.]+|(channel|user|c)\/[A-Za-z0-9_\-]+)\/?$/,
     };
     return regexes[platform]?.test(url) ?? false;
   };
@@ -286,8 +288,8 @@ const CustomizeLinks: NextPage = () => {
   }
 
   return (
-    <>
-      <div className="flex bg-primary">
+    <div className="flex min-h-screen">
+      <div className="bg-gray-100 p-5">
         <MainLayout
           profilePicture={profilePicture || undefined}
           email={email || undefined}
@@ -296,160 +298,158 @@ const CustomizeLinks: NextPage = () => {
             url: urls[index] || platformDefaultUrls[link.platform] || "",
           }))}
         />
+      </div>
 
-        <div className="bg-gray-100 p-5 w-full h-full">
-          <Head>
-            <title>Customize Links</title>
-          </Head>
-          <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-12">
-            <h1 className="sm:text-[32px] text-2xl font-bold mb-4 text-black">
-              Customize your links
-            </h1>
-            <p className="text-[#737373] mb-6 text-base">
-              Add/remove links below and then share all your profiles with the
-              world!
-            </p>
-            <button
-              onClick={addLink}
-              className="w-full py-2 bg-transparent border hover:bg-purple border-[#633CFF] text-[#633CFF] font-bold rounded-lg mb-4"
-            >
-              + Add new link
-            </button>
+      <div className="bg-gray-100 p-5 flex-1">
+        <Head>
+          <title>Customize Links</title>
+        </Head>
+        <div className="max-w-4xl mx-auto shadow-md rounded-lg p-12 bg-white">
+          <h1 className="sm:text-[32px] text-2xl font-bold mb-4 text-black">
+            Customize your links
+          </h1>
+          <p className="text-[#737373] mb-6 text-base">
+            Add/remove links below and then share all your profiles with the
+            world!
+          </p>
+          <button
+            onClick={addLink}
+            className="w-full py-2 bg-transparent border hover:bg-purple border-[#633CFF] text-[#633CFF] font-bold rounded-lg mb-4"
+          >
+            + Add new link
+          </button>
 
-            <div className="h-108 overflow-y-auto">
-              {showPlaceholder && links.length === 0 && (
-                <section className="self-stretch rounded-xl bg-[#fafafa] overflow-hidden flex flex-col items-center justify-center py-[62.5px] px-5 box-border max-w-full">
-                  <div className="self-stretch flex flex-col items-center justify-center gap-10 max-w-full">
-                    <Image
-                      className="relative"
-                      width={249.5}
-                      height={40}
-                      loading="lazy"
-                      alt="finger image"
-                      src={fingerImage}
-                    />
-                    <div className="w-100 flex flex-col items-center justify-start gap-6 max-w-full">
-                      <h1 className="self-stretch text-[#333] font-bold text-[32px]">
-                        Let’s get you started
-                      </h1>
-                      <div className="self-stretch text-[16px] text-[#737373] font-normal">
-                        Use the “Add new link” button to get started. Once you
-                        have more than one link, you can reorder and edit them.
-                        We’re here to help you share your profiles with
-                        everyone!
-                      </div>
+          <div className="h-108 overflow-y-auto">
+            {showPlaceholder && links.length === 0 && (
+              <section className="self-stretch rounded-xl bg-[#fafafa] overflow-hidden flex flex-col items-center justify-center py-[62.5px] px-5 box-border max-w-full">
+                <div className="self-stretch flex flex-col items-center justify-center gap-10 max-w-full">
+                  <Image
+                    className="relative"
+                    width={249.5}
+                    height={40}
+                    loading="lazy"
+                    alt="finger image"
+                    src={fingerImage}
+                  />
+                  <div className="w-100 flex flex-col items-center justify-start gap-6 max-w-full">
+                    <h1 className="self-stretch text-[#333] font-bold text-[32px]">
+                      Let’s get you started
+                    </h1>
+                    <div className="self-stretch text-[16px] text-[#737373] font-normal">
+                      Use the “Add new link” button to get started. Once you
+                      have more than one link, you can reorder and edit them.
+                      We’re here to help you share your profiles with everyone!
                     </div>
-                  </div>
-                </section>
-              )}
-              {links.map((link, index) => (
-                <div key={index} className="mb-4">
-                  <div className="flex justify-between text-center items-center">
-                    <div className="flex items-center gap-1.5">
-                      <div className="">
-                        <div className="w-3 border border-gray bg-gray" />
-                        <div className="w-3 border border-gray mt-1 bg-gray" />
-                      </div>
-                      <p className="text-[#737373] font-semibold">
-                        Link #{index + 1}
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => removeLink(index)}
-                      className="p-2 text-[#737373] text-base"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                  <div className="flex items-center space-x-4">
-                    <div className="relative w-full">
-                      <label className="text-[#737373] text-xs" htmlFor="">
-                        Platform
-                      </label>
-                      <div
-                        onClick={() => toggleDropdown(index)}
-                        className="cursor-pointer px-4 py-2 border border-[#737373] rounded-lg w-full mb-8 text-black flex gap-2"
-                      >
-                        {platformImages[link.platform] && (
-                          <Image
-                            src={platformImages[link.platform]}
-                            alt="icon"
-                            width={15}
-                            height={15}
-                          />
-                        )}
-                        {link.platform || "Select platform"}
-                      </div>
-                      {dropdownOpen[index] && (
-                        <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1">
-                          {platforms.map((platform) => (
-                            <div
-                              key={platform}
-                              onClick={() => selectPlatform(index, platform)}
-                              className="cursor-pointer px-4 py-2 hover:bg-gray-200 flex items-center gap-2 active:text-secondary"
-                            >
-                              {platformImages[platform] && (
-                                <Image
-                                  src={platformImages[platform]}
-                                  alt="icon"
-                                  width={15}
-                                  height={15}
-                                />
-                              )}
-                              <span>{platform}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <label className="text-[#737373] text-xs" htmlFor="Label">
-                      Link
-                    </label>
-                    <input
-                      type="text"
-                      placeholder={
-                        platformDefaultUrls[link.platform] ||
-                        "e.g. https://github.com/username"
-                      }
-                      value={urls[index] || ""}
-                      onChange={(e) => handleUrlChange(index, e.target.value)}
-                      className={`w-full p-2 border ${isValidUrl(link.platform, urls[index] || "") || !validationPerformed ? "border-gray " : "border-red focus:border-tertiary"} focus:shadow-custom-shadow outline-none rounded-lg text-black px-[1.9rem]`}
-                    />
-                    <Image
-                      src={chain}
-                      alt="link"
-                      width={20}
-                      height={20}
-                      className="absolute top-9 left-1 mx-1"
-                    />
-                    {!isValidUrl(link.platform, urls[index] || "") &&
-                      validationPerformed && (
-                        <p className="text-red text-xs absolute top-9 right-0 mx-5">
-                          Please check the URL
-                        </p>
-                      )}
                   </div>
                 </div>
-              ))}
-            </div>
-
-            <hr className="mt-5" />
-
-            <div className="mt-2 text-right">
-              <button
-                onClick={saveLinks}
-                className="px-4 py-2 bg-[#633CFF] text-white font-bold rounded"
-              >
-                Save
-              </button>
-            </div>
+              </section>
+            )}
+            {links.map((link, index) => (
+              <div key={index} className="mb-4">
+                <div className="flex justify-between text-center items-center">
+                  <div className="flex items-center gap-1.5">
+                    <div className="">
+                      <div className="w-3 border border-gray bg-gray" />
+                      <div className="w-3 border border-gray mt-1 bg-gray" />
+                    </div>
+                    <p className="text-[#737373] font-semibold">
+                      Link #{index + 1}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => removeLink(index)}
+                    className="p-2 text-[#737373] text-base"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <div className="flex items-center space-x-4">
+                  <div className="relative w-full">
+                    <label className="text-[#737373] text-xs" htmlFor="">
+                      Platform
+                    </label>
+                    <div
+                      onClick={() => toggleDropdown(index)}
+                      className="cursor-pointer px-4 py-2 border border-[#737373] rounded-lg w-full mb-8 text-black flex gap-2"
+                    >
+                      {platformImages[link.platform] && (
+                        <Image
+                          src={platformImages[link.platform]}
+                          alt="icon"
+                          width={15}
+                          height={15}
+                        />
+                      )}
+                      {link.platform || "Select platform"}
+                    </div>
+                    {dropdownOpen[index] && (
+                      <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1">
+                        {platforms.map((platform) => (
+                          <div
+                            key={platform}
+                            onClick={() => selectPlatform(index, platform)}
+                            className="cursor-pointer px-4 py-2 hover:bg-gray-200 flex items-center gap-2 active:text-secondary"
+                          >
+                            {platformImages[platform] && (
+                              <Image
+                                src={platformImages[platform]}
+                                alt="icon"
+                                width={15}
+                                height={15}
+                              />
+                            )}
+                            <span>{platform}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="relative">
+                  <label className="text-[#737373] text-xs" htmlFor="Label">
+                    Link
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={
+                      platformDefaultUrls[link.platform] ||
+                      "e.g. https://github.com/username"
+                    }
+                    value={urls[index] || ""}
+                    onChange={(e) => handleUrlChange(index, e.target.value)}
+                    className={`w-full p-2 border ${isValidUrl(link.platform, urls[index] || "") || !validationPerformed ? "border-[#737373]" : "border-[#FF3939] focus:border-[#BEADFF]"} focus:shadow-custom-shadow outline-none rounded-lg text-black px-[1.9rem]`}
+                  />
+                  <Image
+                    src={chain}
+                    alt="link"
+                    width={20}
+                    height={20}
+                    className="absolute top-9 left-1 mx-1 text-red-400"
+                  />
+                  {!isValidUrl(link.platform, urls[index] || "") &&
+                    validationPerformed && (
+                      <p className="text-[#FF3939] text-xs absolute top-9 right-0 mx-5">
+                        Please check the URL
+                      </p>
+                    )}
+                </div>
+              </div>
+            ))}
           </div>
-          <Toaster position="top-right" reverseOrder={false} />
+
+          <hr className="mt-5" />
+
+          <div className="mt-2 text-right">
+            <button
+              onClick={saveLinks}
+              className="px-4 py-2 bg-[#633CFF] text-white font-bold rounded"
+            >
+              Save
+            </button>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
