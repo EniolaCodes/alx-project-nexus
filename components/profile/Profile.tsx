@@ -180,7 +180,7 @@ const ProfilePage: React.FC = () => {
 
         toast.success("Profile updated successfully!");
         setTimeout(() => {
-          router.push("/");
+          router.push("/links");
         }, 1000);
       } catch (error: any) {
         console.error("Error updating profile:", error);
@@ -312,7 +312,7 @@ const ProfilePage: React.FC = () => {
                 type="text"
                 placeholder="e.g Appleseed"
                 {...register("lastName", { required: "Can't be empty" })}
-                className="w-full rounded-md py-2 border px-11.2 border-[#D9D9D9] text-base outline-none text-black"
+                className="w-full rounded-md py-2 border px-[.7rem] border-[#D9D9D9] text-base outline-none text-black"
               />
               {errors.lastName && (
                 <span className="text-[#FF3939] absolute top-3 right-0 px-4 text-xs">

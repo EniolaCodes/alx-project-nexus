@@ -125,7 +125,7 @@ const Register = () => {
               <Image
                 src={mail}
                 alt="mail"
-                className="absolute top-4 mx-3 left-0"
+                className="absolute top-4 mx-3 right-0"
               />
             </div>
           </div>
