@@ -15,10 +15,11 @@ import {
   query,
   where,
   getDocs,
+  onSnapshot,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Link from "next/link";
 
 interface UserLink {
@@ -47,14 +48,18 @@ const ProfilePage: React.FC = () => {
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [links, setLinks] = useState<UserLink[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
-      const fetchProfile = async () => {
-        const docRef = doc(db, "profiles", user.uid);
-        const docSnap = await getDoc(docRef);
+    if (!user) return;
+
+    // Real-time listener for profile document
+    const profileRef = doc(db, "profiles", user.uid);
+    const unsubscribeProfile = onSnapshot(
+      profileRef,
+      (docSnap) => {
         if (docSnap.exists()) {
           const profileData = docSnap.data() as FormData & {
             imageUrl?: string;
@@ -67,23 +72,30 @@ const ProfilePage: React.FC = () => {
           setLastName(profileData.lastName || "");
           setEmail(profileData.email || "");
         }
-      };
+      },
+      (err) => {
+        console.error("Profile onSnapshot error:", err);
+      },
+    );
 
-      const fetchLinks = async () => {
-        const linksRef = collection(db, "links");
-        const q = query(linksRef, where("userId", "==", user.uid));
-        const querySnapshot = await getDocs(q);
-        const userLinks: UserLink[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          userLinks.push({ id: doc.id, ...data } as UserLink);
-        });
-        setLinks(userLinks);
-      };
+    // One-time fetch for links
+    const fetchLinks = async () => {
+      const linksRef = collection(db, "links");
+      const q = query(linksRef, where("userId", "==", user.uid));
+      const querySnapshot = await getDocs(q);
+      const userLinks: UserLink[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        userLinks.push({ id: doc.id, ...data } as UserLink);
+      });
+      setLinks(userLinks);
+    };
 
-      fetchProfile();
-      fetchLinks();
-    }
+    fetchLinks();
+
+    return () => {
+      unsubscribeProfile();
+    };
   }, [user, setValue]);
 
   useEffect(() => {
@@ -112,21 +124,54 @@ const ProfilePage: React.FC = () => {
 
   const onSubmit = async (data: FormData) => {
     if (user) {
+      setIsLoading(true);
       try {
         let imageUrl: string | null = profilePicture;
 
         if (selectedFile) {
-          const imageRef = ref(storage, `profile_images/${user.uid}`);
-          await uploadBytes(imageRef, selectedFile);
-          imageUrl = await getDownloadURL(imageRef);
+          // Validate file size (max 5MB)
+          if (selectedFile.size > 5 * 1024 * 1024) {
+            toast.error("Image size must be less than 5MB");
+            setIsLoading(false);
+            return;
+          }
+
+          // Validate file type
+          if (!selectedFile.type.startsWith("image/")) {
+            toast.error("Please upload an image file");
+            setIsLoading(false);
+            return;
+          }
+
+          try {
+            const imageRef = ref(storage, `profile_images/${user.uid}`);
+            await uploadBytes(imageRef, selectedFile);
+            imageUrl = await getDownloadURL(imageRef);
+          } catch (uploadError: any) {
+            console.error("Upload error:", uploadError);
+            if (uploadError.code === "storage/unauthorized") {
+              toast.error("Storage access denied. Contact support.");
+            } else if (uploadError.code === "storage/retry-limit-exceeded") {
+              toast.error("Upload timeout. Please try again.");
+            } else {
+              toast.error(`Upload failed: ${uploadError.message}`);
+            }
+            setIsLoading(false);
+            return;
+          }
         }
 
-        await setDoc(doc(db, "profiles", user.uid), {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          imageUrl,
-        });
+        console.log("Submitting profile update:", data, { imageUrl });
+        await setDoc(
+          doc(db, "profiles", user.uid),
+          {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            imageUrl,
+          },
+          { merge: true },
+        );
 
         setFirstName(data.firstName);
         setLastName(data.lastName);
@@ -134,9 +179,14 @@ const ProfilePage: React.FC = () => {
         setProfilePicture(imageUrl);
 
         toast.success("Profile updated successfully!");
-      } catch (error) {
+        setTimeout(() => {
+          router.push("/");
+        }, 1000);
+      } catch (error: any) {
         console.error("Error updating profile:", error);
         toast.error("Failed to update profile.");
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -166,15 +216,17 @@ const ProfilePage: React.FC = () => {
     );
   }
   return (
-    <div className="lg:flex bg-[#FAFAFA]">
-      <MainLayout
-        profilePicture={profilePicture || undefined}
-        firstName={firstName}
-        lastName={lastName}
-        email={email}
-        links={links}
-      />
-      <div className="max-w-4xl my-8 bg-white shadow-md rounded-lg p-8">
+    <div className="lg:flex bg-gray-100 p-5">
+      <div className="bg-gray-100 p-7">
+        <MainLayout
+          profilePicture={profilePicture || undefined}
+          firstName={firstName}
+          lastName={lastName}
+          email={email}
+          links={links}
+        />
+      </div>
+      <div className="max-w-4xl my-8 bg-white shadow-md rounded-lg p-5 flex-1">
         <h1 className="text-black sm:text-[32px] text-2xl font-bold">
           Profile Details
         </h1>
@@ -291,14 +343,23 @@ const ProfilePage: React.FC = () => {
               )}
             </div>
           </div>
-          <button
-            type="submit"
-            className="text-right border py-2 px-7 mt-20 border-t rounded-md text-white bg-[#633CFF] font-semibold hover:bg-[#4e2ed1] transition-all duration-300"
-          >
-            Save
-          </button>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="text-right border py-2 px-7 mt-20 border-t rounded-md text-white bg-[#633CFF] font-semibold hover:bg-[#4e2ed1] transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {isLoading ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                "Save"
+              )}
+            </button>
+          </div>
         </form>
-        <Toaster position="top-right" reverseOrder={false} />
       </div>
     </div>
   );

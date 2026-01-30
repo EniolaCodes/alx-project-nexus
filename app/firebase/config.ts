@@ -1,7 +1,7 @@
 import { initializeApp, getApp, getApps } from "firebase/app";
 import { getAuth, Auth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage";
+import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { getAnalytics, Analytics } from "firebase/analytics";
 
 // Define the type for the Firebase configuration
@@ -31,6 +31,18 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth: Auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
+// Connect to the Firebase Storage emulator when running on localhost
+if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+  try {
+    connectStorageEmulator(storage, "localhost", 9199);
+    // eslint-disable-next-line no-console
+    console.log("Connected to Firebase Storage emulator at localhost:9199");
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.warn("Could not connect to Storage emulator:", err);
+  }
+}
 const analytics: Analytics | undefined =
   typeof window !== "undefined" && firebaseConfig.measurementId
     ? getAnalytics(app)
