@@ -10,6 +10,7 @@ export default function Client({
 }>) {
   const pathname = usePathname();
   const hideNavbar =
+    pathname === "/" ||
     pathname === "/login" ||
     pathname === "/register" ||
     pathname === "/preview";

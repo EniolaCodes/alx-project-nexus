@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 import { auth } from "@/app/firebase/config";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
 import logo from "@/public/assets/images/logo.svg";
-import lock from "@/public/assets/images/lock.svg";
 import mail from "@/public/assets/images/mail.svg";
 import { loginSchema, LoginFormData } from "@/lib/schemas/user";
 
@@ -36,7 +35,7 @@ const Login = () => {
         toast.success("Login successful!");
         reset();
         setTimeout(() => {
-          router.push("/");
+          router.push("/profile");
         }, 1000);
       }
     } catch (e: any) {
@@ -107,7 +106,7 @@ const Login = () => {
               <Image
                 src={mail}
                 alt="mail"
-                className="absolute top-4 mx-3 left-0"
+                className="absolute top-4 mx-3 right-0"
               />
             </div>
           </div>
