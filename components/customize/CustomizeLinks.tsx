@@ -256,6 +256,9 @@ const CustomizeLinks: NextPage = () => {
       await Promise.all(promises);
       toast.success("Links saved successfully!");
       fetchLinks(); // Refresh the links
+      setTimeout(() => {
+        router.push("/preview");
+      }, 1000);
     } catch (error) {
       toast.error("Error saving links.");
       console.error("Error saving links:", error);

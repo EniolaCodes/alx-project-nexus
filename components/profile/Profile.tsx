@@ -15,6 +15,7 @@ import {
   query,
   where,
   getDocs,
+  onSnapshot,
 } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -52,10 +53,13 @@ const ProfilePage: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (user) {
-      const fetchProfile = async () => {
-        const docRef = doc(db, "profiles", user.uid);
-        const docSnap = await getDoc(docRef);
+    if (!user) return;
+
+    // Real-time listener for profile document
+    const profileRef = doc(db, "profiles", user.uid);
+    const unsubscribeProfile = onSnapshot(
+      profileRef,
+      (docSnap) => {
         if (docSnap.exists()) {
           const profileData = docSnap.data() as FormData & {
             imageUrl?: string;
@@ -68,23 +72,30 @@ const ProfilePage: React.FC = () => {
           setLastName(profileData.lastName || "");
           setEmail(profileData.email || "");
         }
-      };
+      },
+      (err) => {
+        console.error("Profile onSnapshot error:", err);
+      },
+    );
 
-      const fetchLinks = async () => {
-        const linksRef = collection(db, "links");
-        const q = query(linksRef, where("userId", "==", user.uid));
-        const querySnapshot = await getDocs(q);
-        const userLinks: UserLink[] = [];
-        querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          userLinks.push({ id: doc.id, ...data } as UserLink);
-        });
-        setLinks(userLinks);
-      };
+    // One-time fetch for links
+    const fetchLinks = async () => {
+      const linksRef = collection(db, "links");
+      const q = query(linksRef, where("userId", "==", user.uid));
+      const querySnapshot = await getDocs(q);
+      const userLinks: UserLink[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        userLinks.push({ id: doc.id, ...data } as UserLink);
+      });
+      setLinks(userLinks);
+    };
 
-      fetchProfile();
-      fetchLinks();
-    }
+    fetchLinks();
+
+    return () => {
+      unsubscribeProfile();
+    };
   }, [user, setValue]);
 
   useEffect(() => {
@@ -150,12 +161,17 @@ const ProfilePage: React.FC = () => {
           }
         }
 
-        await setDoc(doc(db, "profiles", user.uid), {
-          firstName: data.firstName,
-          lastName: data.lastName,
-          email: data.email,
-          imageUrl,
-        });
+        console.log("Submitting profile update:", data, { imageUrl });
+        await setDoc(
+          doc(db, "profiles", user.uid),
+          {
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            imageUrl,
+          },
+          { merge: true },
+        );
 
         setFirstName(data.firstName);
         setLastName(data.lastName);
@@ -164,7 +180,7 @@ const ProfilePage: React.FC = () => {
 
         toast.success("Profile updated successfully!");
         setTimeout(() => {
-          router.push("/preview");
+          router.push("/");
         }, 1000);
       } catch (error: any) {
         console.error("Error updating profile:", error);
