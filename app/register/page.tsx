@@ -10,7 +10,6 @@ import { auth, db } from "@/app/firebase/config";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { setDoc, doc } from "firebase/firestore";
 import logo from "@/public/assets/images/logo.svg";
-import lock from "@/public/assets/images/lock.svg";
 import mail from "@/public/assets/images/mail.svg";
 import { signupSchema, SignupFormData } from "@/lib/schemas/user";
 
@@ -29,8 +28,6 @@ const Register = () => {
 
   const [createUserWithEmailAndPassword] =
     useCreateUserWithEmailAndPassword(auth);
-
-  const router = useRouter();
 
   const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);

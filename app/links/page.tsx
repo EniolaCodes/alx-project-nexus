@@ -125,7 +125,7 @@ const Links: NextPage = () => {
 
     const profileRef = doc(db, "profiles", user.uid);
 
-    // onSnapshot is "Live" - it stays open and listens for changes
+    // onSnapshot
     const unsubscribe = onSnapshot(
       profileRef,
       (docSnap) => {
@@ -301,7 +301,7 @@ const Links: NextPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-2 border-[#633CFF]"></div>
+        <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-2 border-[#633CFF]" />
       </div>
     );
   }
@@ -309,10 +309,8 @@ const Links: NextPage = () => {
   if (error || !user) {
     return (
       <div className="text-center flex flex-col items-center justify-center min-h-screen">
-        <div className="animate-spin flex justify-center items-center rounded-full h-20 w-20 border-t-4 border-b-2 border-[#FF633C]"></div>
-
+        <div className="animate-spin flex justify-center items-center rounded-full h-20 w-20 border-t-4 border-b-2 border-[#FF633C]" />
         <p className="text-gray-700 mt-4">Please log in to continue.</p>
-
         <Link
           href="/login"
           className="text-[#FF633C] underline mt-2 font-medium"

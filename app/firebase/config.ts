@@ -15,7 +15,7 @@ interface FirebaseConfig {
   measurementId?: string;
 }
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig: FirebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
