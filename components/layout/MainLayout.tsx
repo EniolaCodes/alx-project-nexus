@@ -52,13 +52,14 @@ const MainLayout: FC<MainLayoutProps> = ({
           className="w-[16rem] absolute top-3 mx-2.5"
         />
         <div>
-          <div className="rounded-full w-28 h-28 content-none bg-[#EEEEEE] mx-20 top-16 absolute left-0">
+          <div className="rounded-full w-20 h-20 content-none bg-[#EEEEEE] mx-20 top-16 absolute left-0">
             {profilePicture && (
               <Image
                 src={profilePicture}
                 alt="Profile Picture"
                 className="rounded-full"
-                layout="fill"
+                width={80}
+                height={80}
               />
             )}
           </div>
