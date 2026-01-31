@@ -15,7 +15,7 @@ interface FirebaseConfig {
   measurementId?: string;
 }
 
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig: FirebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY!,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN!,
@@ -31,6 +31,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth: Auth = getAuth(app);
 const db = getFirestore(app);
 const storage = getStorage(app);
+
 const analytics: Analytics | undefined =
   typeof window !== "undefined" && firebaseConfig.measurementId
     ? getAnalytics(app)

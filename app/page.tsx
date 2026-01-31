@@ -1,6 +1,7 @@
 "use client";
-import LinkPage from "@/components/link/LinkPage";
+
+import Login from "./login/page";
 
 export default function Home() {
-  return <LinkPage />;
+  return <Login />;
 }

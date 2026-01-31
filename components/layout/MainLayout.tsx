@@ -38,7 +38,7 @@ const MainLayout: FC<MainLayoutProps> = ({
   const boxes = new Array(5).fill(null);
 
   return (
-    <div className="py-28 px-20 lg:block hidden">
+    <div className="px-28 lg:block hidden bg-white shadow-md rounded-lg p-12">
       <div className="h-157.75 w-76.75 relative">
         <Image
           className="absolute top-0 left-0"
@@ -52,20 +52,21 @@ const MainLayout: FC<MainLayoutProps> = ({
           className="w-[16rem] absolute top-3 mx-2.5"
         />
         <div>
-          <div className="rounded-full w-28 h-28 content-none bg-dark mx-20 top-16 absolute left-0">
+          <div className="rounded-full w-20 h-20 content-none bg-[#EEEEEE] mx-20 top-16 absolute left-0">
             {profilePicture && (
               <Image
                 src={profilePicture}
                 alt="Profile Picture"
                 className="rounded-full"
-                layout="fill"
+                width={80}
+                height={80}
               />
             )}
           </div>
           {!firstName && !lastName && (
             <>
-              <div className="w-40 top-48 mx-[3.6rem] absolute h-5 rounded-full bg-dark" />
-              <div className="w-20 top-56 mx-[6.4rem] absolute h-2 rounded-full bg-dark" />
+              <div className="w-40 top-48 mx-[3.6rem] absolute h-5 rounded-full bg-[#EEEEEE] " />
+              <div className="w-20 top-56 mx-[6.4rem] absolute h-2 rounded-full bg-[#EEEEEE] " />
             </>
           )}
           {firstName && lastName && (
@@ -93,11 +94,11 @@ const MainLayout: FC<MainLayoutProps> = ({
                     ? "bg-[#2D68FF]"
                     : validLinks[index] &&
                         validLinks[index].platform === "YouTube"
-                      ? "bg-red"
+                      ? "bg-[#EE0000]"
                       : validLinks[index] &&
                           validLinks[index].platform === "Facebook"
-                        ? "bg-[#4267B2]"
-                        : "bg-dark"
+                        ? "bg-[#3e63ae]"
+                        : "bg-[#EEEEEE]"
               }`}
             >
               {validLinks[index] ? (

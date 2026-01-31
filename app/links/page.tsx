@@ -14,6 +14,7 @@ import {
   where,
   updateDoc,
   doc,
+  onSnapshot,
   getDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/navigation";
@@ -51,7 +52,7 @@ interface Link {
   createdAt?: Date;
 }
 
-const CustomizeLinks: NextPage = () => {
+const Links: NextPage = () => {
   const [user, loading, error] = useAuthState(auth);
   const [links, setLinks] = useState<Link[]>([]);
   const [urls, setUrls] = useState<{ [key: number]: string }>({});
@@ -60,6 +61,8 @@ const CustomizeLinks: NextPage = () => {
   );
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(true);
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [lastName, setLastName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [validationPerformed, setValidationPerformed] =
     useState<boolean>(false);
@@ -95,33 +98,55 @@ const CustomizeLinks: NextPage = () => {
     fetchLinks();
   }, [fetchLinks]);
 
+  //   const fetchProfileData = async () => {
+  //     if (user) {
+  //       try {
+  //         const profileDocRef = doc(db, "profiles", user.uid);
+  //         const profileDocSnap = await getDoc(profileDocRef);
+
+  //         if (profileDocSnap.exists()) {
+  //           const profileData = profileDocSnap.data(); // Get raw data
+
+  //           setProfilePicture(profileData.imageUrl || null);
+  //           setFirstName(profileData.firstName || null);
+  //           setLastName(profileData.lastName || null);
+  //           setEmail(profileData.email ?? null);
+  //         }
+  //       } catch (err) {
+  //         console.error("Error fetching profile data:", err);
+  //       }
+  //     }
+  //   };
+
+  //   fetchProfileData();
+  // }, [user]);
   useEffect(() => {
-    const fetchProfileData = async () => {
-      if (user) {
-        try {
-          const profileDocRef = doc(db, "profiles", user.uid);
-          const profileDocSnap = await getDoc(profileDocRef);
+    if (!user) return;
 
-          if (profileDocSnap.exists()) {
-            const profileData = profileDocSnap.data() as {
-              imageUrl?: string;
-              email?: string;
-            };
-            setProfilePicture(profileData.imageUrl || null);
-            setEmail(profileData.email ?? null);
-          }
-        } catch (err) {
-          console.error("Error fetching profile data:", err);
+    const profileRef = doc(db, "profiles", user.uid);
+
+    // onSnapshot
+    const unsubscribe = onSnapshot(
+      profileRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setProfilePicture(data.imageUrl || null);
+          setEmail(data.email || null);
+          setFirstName(data.firstName || null);
+          setLastName(data.lastName || null);
         }
-      }
-    };
+      },
+      (err) => {
+        console.error("Real-time profile fetch failed:", err);
+      },
+    );
 
-    fetchProfileData();
+    return () => unsubscribe(); // This stops the listener when you leave the page
   }, [user]);
-
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login");
+      router.push("/preview");
     }
   }, [user, loading, router]);
 
@@ -149,14 +174,22 @@ const CustomizeLinks: NextPage = () => {
 
   const isValidUrl = (platform: string, url: string) => {
     const regexes: Record<string, RegExp> = {
-      GitHub: /^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+\/?$/,
-      LinkedIn: /^https:\/\/(www\.)?linkedin\.com\/in\/[\w\-\.]+\/?$/,
+      // Allows github.com/username or github.com/username/
+      GitHub: /^https?:\/\/(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/,
+
+      // Allows linkedin.com/in/username or linkedin.com/in/username/
+      LinkedIn: /^https?:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+\/?$/,
+
+      // Allows facebook.com/username, m.facebook.com, or profile.php IDs
       Facebook:
-        /^https:\/\/(www\.)?facebook\.com\/(profile\.php\?id=\d+|[A-Za-z0-9\.]+)\/?$/,
+        /^https?:\/\/([a-z0-9-]+\.)?facebook\.com\/(profile\.php\?id=\d+|[A-Za-z0-9.]+)\/?$/,
+
+      // Allows youtube.com/@handle, youtube.com/c/name, or youtube.com/channel/ID
       YouTube:
-        /^https:\/\/(?:[A-Za-z0-9-]+\.)?youtube\.com\/(?:@?[A-Za-z0-9_\-\.]+|(channel|user|c)\/[A-Za-z0-9_\-]+)\/?$/,
+        /^https?:\/\/([a-z0-9-]+\.)?youtube\.com\/(?:@?[A-Za-z0-9_\-.]+|channel\/[A-Za-z0-9_\-]+|c\/[A-Za-z0-9_\-]+)\/?$/,
     };
-    return regexes[platform]?.test(url) ?? false;
+
+    return regexes[platform]?.test(url.trim()) ?? false;
   };
 
   const addLink = () => {
@@ -268,7 +301,7 @@ const CustomizeLinks: NextPage = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-2 border-[#633CFF]"></div>
+        <div className="animate-spin rounded-full h-20 w-20 border-t-4 border-b-2 border-[#633CFF]" />
       </div>
     );
   }
@@ -276,10 +309,8 @@ const CustomizeLinks: NextPage = () => {
   if (error || !user) {
     return (
       <div className="text-center flex flex-col items-center justify-center min-h-screen">
-        <div className="animate-spin flex justify-center items-center rounded-full h-20 w-20 border-t-4 border-b-2 border-[#FF633C]"></div>
-
+        <div className="animate-spin flex justify-center items-center rounded-full h-20 w-20 border-t-4 border-b-2 border-[#FF633C]" />
         <p className="text-gray-700 mt-4">Please log in to continue.</p>
-
         <Link
           href="/login"
           className="text-[#FF633C] underline mt-2 font-medium"
@@ -295,6 +326,8 @@ const CustomizeLinks: NextPage = () => {
       <div className="bg-gray-100 p-5">
         <MainLayout
           profilePicture={profilePicture || undefined}
+          firstName={firstName || undefined}
+          lastName={lastName || undefined}
           email={email || undefined}
           links={links.map((link, index) => ({
             platform: link.platform,
@@ -456,4 +489,4 @@ const CustomizeLinks: NextPage = () => {
   );
 };
 
-export default CustomizeLinks;
+export default Links;

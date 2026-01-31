@@ -1,7 +1,7 @@
-import React from "react";
+import PreviewPage from "@/components/preview/Preview";
 
 const page = () => {
-  return <div>page</div>;
+  return <PreviewPage links={[]} imageUrl={null} email={null} />;
 };
 
 export default page;
