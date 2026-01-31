@@ -144,8 +144,16 @@ const ProfilePage: React.FC = () => {
           }
 
           try {
-            const imageRef = ref(storage, `profile_images/${user.uid}`);
-            await uploadBytes(imageRef, selectedFile);
+            //  Add an extension to the reference so the console recognizes it as an image
+            const fileExtension = selectedFile.name.split(".").pop();
+            const imageRef = ref(
+              storage,
+              `profile_images/${user.uid}/avatar.${fileExtension}`,
+            );
+            //  Upload with metadata (helps the Firebase Console display it correctly)
+            const metadata = { contentType: selectedFile.type };
+            await uploadBytes(imageRef, selectedFile, metadata);
+            //  Get the permanent URL
             imageUrl = await getDownloadURL(imageRef);
           } catch (uploadError: any) {
             console.error("Upload error:", uploadError);
@@ -240,10 +248,9 @@ const ProfilePage: React.FC = () => {
               className="border border-[#EFEBFF] bg-[#EFEBFF] sm:py-4 py-12 sm:px-8 px-6 rounded-md flex flex-col items-center cursor-pointer"
               onClick={handleUploadClick}
               style={{
-                backgroundImage:
-                  profilePicture || selectedFile
-                    ? `url(${profilePicture || selectedFile})`
-                    : "",
+                backgroundImage: profilePicture
+                  ? `url(${profilePicture})`
+                  : "none",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
               }}

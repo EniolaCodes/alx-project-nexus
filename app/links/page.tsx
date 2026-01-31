@@ -14,6 +14,7 @@ import {
   where,
   updateDoc,
   doc,
+  onSnapshot,
   getDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/navigation";
@@ -60,6 +61,8 @@ const Links: NextPage = () => {
   );
   const [showPlaceholder, setShowPlaceholder] = useState<boolean>(true);
   const [profilePicture, setProfilePicture] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [lastName, setLastName] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
   const [validationPerformed, setValidationPerformed] =
     useState<boolean>(false);
@@ -95,30 +98,52 @@ const Links: NextPage = () => {
     fetchLinks();
   }, [fetchLinks]);
 
+  //   const fetchProfileData = async () => {
+  //     if (user) {
+  //       try {
+  //         const profileDocRef = doc(db, "profiles", user.uid);
+  //         const profileDocSnap = await getDoc(profileDocRef);
+
+  //         if (profileDocSnap.exists()) {
+  //           const profileData = profileDocSnap.data(); // Get raw data
+
+  //           setProfilePicture(profileData.imageUrl || null);
+  //           setFirstName(profileData.firstName || null);
+  //           setLastName(profileData.lastName || null);
+  //           setEmail(profileData.email ?? null);
+  //         }
+  //       } catch (err) {
+  //         console.error("Error fetching profile data:", err);
+  //       }
+  //     }
+  //   };
+
+  //   fetchProfileData();
+  // }, [user]);
   useEffect(() => {
-    const fetchProfileData = async () => {
-      if (user) {
-        try {
-          const profileDocRef = doc(db, "profiles", user.uid);
-          const profileDocSnap = await getDoc(profileDocRef);
+    if (!user) return;
 
-          if (profileDocSnap.exists()) {
-            const profileData = profileDocSnap.data() as {
-              imageUrl?: string;
-              email?: string;
-            };
-            setProfilePicture(profileData.imageUrl || null);
-            setEmail(profileData.email ?? null);
-          }
-        } catch (err) {
-          console.error("Error fetching profile data:", err);
+    const profileRef = doc(db, "profiles", user.uid);
+
+    // onSnapshot is "Live" - it stays open and listens for changes
+    const unsubscribe = onSnapshot(
+      profileRef,
+      (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setProfilePicture(data.imageUrl || null);
+          setEmail(data.email || null);
+          setFirstName(data.firstName || null);
+          setLastName(data.lastName || null);
         }
-      }
-    };
+      },
+      (err) => {
+        console.error("Real-time profile fetch failed:", err);
+      },
+    );
 
-    fetchProfileData();
+    return () => unsubscribe(); // This stops the listener when you leave the page
   }, [user]);
-
   useEffect(() => {
     if (!loading && !user) {
       router.push("/preview");
@@ -149,14 +174,22 @@ const Links: NextPage = () => {
 
   const isValidUrl = (platform: string, url: string) => {
     const regexes: Record<string, RegExp> = {
-      GitHub: /^https:\/\/(www\.)?github\.com\/[A-Za-z0-9_.-]+\/?$/,
-      LinkedIn: /^https:\/\/(www\.)?linkedin\.com\/in\/[\w\-\.]+\/?$/,
+      // Allows github.com/username or github.com/username/
+      GitHub: /^https?:\/\/(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/,
+
+      // Allows linkedin.com/in/username or linkedin.com/in/username/
+      LinkedIn: /^https?:\/\/(www\.)?linkedin\.com\/in\/[A-Za-z0-9_-]+\/?$/,
+
+      // Allows facebook.com/username, m.facebook.com, or profile.php IDs
       Facebook:
-        /^https:\/\/(www\.)?facebook\.com\/(profile\.php\?id=\d+|[A-Za-z0-9\.]+)\/?$/,
+        /^https?:\/\/([a-z0-9-]+\.)?facebook\.com\/(profile\.php\?id=\d+|[A-Za-z0-9.]+)\/?$/,
+
+      // Allows youtube.com/@handle, youtube.com/c/name, or youtube.com/channel/ID
       YouTube:
-        /^https:\/\/(?:[A-Za-z0-9-]+\.)?youtube\.com\/(?:@?[A-Za-z0-9_\-\.]+|(channel|user|c)\/[A-Za-z0-9_\-]+)\/?$/,
+        /^https?:\/\/([a-z0-9-]+\.)?youtube\.com\/(?:@?[A-Za-z0-9_\-.]+|channel\/[A-Za-z0-9_\-]+|c\/[A-Za-z0-9_\-]+)\/?$/,
     };
-    return regexes[platform]?.test(url) ?? false;
+
+    return regexes[platform]?.test(url.trim()) ?? false;
   };
 
   const addLink = () => {
@@ -295,6 +328,8 @@ const Links: NextPage = () => {
       <div className="bg-gray-100 p-5">
         <MainLayout
           profilePicture={profilePicture || undefined}
+          firstName={firstName || undefined}
+          lastName={lastName || undefined}
           email={email || undefined}
           links={links.map((link, index) => ({
             platform: link.platform,
