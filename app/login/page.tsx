@@ -95,8 +95,8 @@ const Login = () => {
                 placeholder="e.g. alex@email.com"
                 className={`text-base ${
                   errors.email
-                    ? "text-[#FF3939] border w-full rounded-md py-3 px-10 outline-none"
-                    : "border w-full rounded-md py-3 px-10 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
+                    ? "text-[#FF3939] border w-full rounded-md py-3 px-6 outline-none"
+                    : "border w-full rounded-md py-3 px-6 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
                 }`}
                 {...register("email")}
               />
@@ -125,8 +125,8 @@ const Login = () => {
                 placeholder="Enter your password"
                 className={`text-base ${
                   errors.password
-                    ? "text-[#FF3939] border w-full rounded-md py-3 px-10 outline-none"
-                    : "border w-full rounded-md py-3 px-10 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
+                    ? "text-[#FF3939] border w-full rounded-md py-3 px-6 outline-none"
+                    : "border w-full rounded-md py-3 px-6 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
                 }`}
                 {...register("password")}
               />
