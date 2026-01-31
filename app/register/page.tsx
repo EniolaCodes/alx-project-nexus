@@ -10,7 +10,6 @@ import { auth, db } from "@/app/firebase/config";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import { setDoc, doc } from "firebase/firestore";
 import logo from "@/public/assets/images/logo.svg";
-import lock from "@/public/assets/images/lock.svg";
 import mail from "@/public/assets/images/mail.svg";
 import { signupSchema, SignupFormData } from "@/lib/schemas/user";
 
@@ -29,8 +28,6 @@ const Register = () => {
 
   const [createUserWithEmailAndPassword] =
     useCreateUserWithEmailAndPassword(auth);
-
-  const router = useRouter();
 
   const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);
@@ -114,8 +111,8 @@ const Register = () => {
                 placeholder="e.g. alex@email.com"
                 className={`text-base ${
                   errors.email
-                    ? "text-[#FF3939] border w-full rounded-md py-3 px-10 outline-none"
-                    : "border w-full rounded-md py-3 px-10 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
+                    ? "text-[#FF3939] border w-full rounded-md py-3 px-6 outline-none"
+                    : "border w-full rounded-md py-3 px-6 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
                 }`}
                 {...register("email")}
               />
@@ -145,8 +142,8 @@ const Register = () => {
                 placeholder="At least 8 characters"
                 className={`text-base ${
                   errors.password
-                    ? "text-[#FF3939] border w-full rounded-md py-3 px-10 outline-none"
-                    : "border w-full rounded-md py-3 px-10 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
+                    ? "text-[#FF3939] border w-full rounded-md py-3 px-6 outline-none"
+                    : "border w-full rounded-md py-3 px-6 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
                 }`}
                 {...register("password")}
               />
@@ -210,8 +207,8 @@ const Register = () => {
                 placeholder="At least 8 characters"
                 className={`text-base ${
                   errors.confirmPassword
-                    ? "text-[#FF3939] border w-full rounded-md py-3 px-10 outline-none"
-                    : "border w-full rounded-md py-3 px-10 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
+                    ? "text-[#FF3939] border w-full rounded-md py-3 px-6 outline-none"
+                    : "border w-full rounded-md py-3 px-6 text-base text-[#737373] focus:border-[#633CFF] focus:outline-none focus:shadow-custom-shadow transition-shadow duration-300"
                 }`}
                 {...register("confirmPassword")}
               />

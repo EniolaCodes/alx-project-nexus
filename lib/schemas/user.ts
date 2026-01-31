@@ -37,6 +37,6 @@ export const signupSchema = baseUserSchema
     message: "Passwords do not match",
   });
 
-// ✅ Types inferred from schemas
+//  Types inferred from schemas
 export type LoginFormData = z.infer<typeof loginSchema>;
 export type SignupFormData = z.infer<typeof signupSchema>;

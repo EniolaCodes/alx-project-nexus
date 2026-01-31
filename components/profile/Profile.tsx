@@ -10,7 +10,6 @@ import { db, auth, storage } from "@/app/firebase/config";
 import {
   doc,
   setDoc,
-  getDoc,
   collection,
   query,
   where,
