@@ -59,6 +59,20 @@ To ensure data integrity, the project uses two main Firestore collections:
 
 ---
 
+### Configuring Firebase for Production
+
+Once you deploy to Vercel, you must authorize your new domain in the Firebase Console. Without this step, Firebase Authentication and certain Firestore operations will be blocked for security reasons.
+
+1. \*\*Copy your Vercel URL\*\*: It should look like your-project-name.vercel.app.
+
+2. \*\*Go to Firebase Console\*\*: Navigate to Authentication > Settings > Authorized Domains.
+
+3. \*\*Add Domain\*\*: Click "Add Domain" and paste your Vercel URL.
+
+4. \*\*Repeat for Custom Domains\*\*: If you connect a custom domain (e.g., www.yourname.com) to Vercel, repeat this step for that domain as well.
+
+---
+
 ## Troubleshooting Guide
 
 | Issue                             | Potential Cause        | Solution                                                                                      |
