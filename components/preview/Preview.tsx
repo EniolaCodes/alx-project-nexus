@@ -26,7 +26,6 @@ interface Link {
 
 interface PreviewProps {
   links: Link[];
-  profilePicture: string | null;
   email: string | null;
   imageUrl: string | null;
 }
