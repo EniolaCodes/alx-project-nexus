@@ -1,4 +1,3 @@
-import React from "react";
 import PreviewPage from "@/components/preview/Preview";
 
 const page = () => {
