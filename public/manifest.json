@@ -1,0 +1,16 @@
+{
+  "name": "DevLinks",
+  "short_name": "DevLinks",
+  "description": "Your All-in-One Link Sharing Profile",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#633CFF",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
