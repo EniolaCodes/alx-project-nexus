@@ -40,6 +40,8 @@ export const metadata: Metadata = {
     description: "The professional way to share your links.",
     images: ["https://alx-project-nexus-delta-one.vercel.app/preview.png"],
   },
+  manifest: "/manifest.json",
+  themeColor: "#633CFF",
 };
 
 const instrumentSans = Instrument_Sans({
