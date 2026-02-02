@@ -51,7 +51,7 @@ const Navbar = () => {
 
   return (
     <section className="w-full bg-primary sm:px-10 px-8 py-5">
-      <div className="flex justify-between bg-white sm:px-3 px-3 py-2 rounded-xl">
+      <nav className="flex justify-between bg-white sm:px-3 px-3 py-2 rounded-xl">
         <Link href={"/"}>
           <Image
             src={logo}
@@ -109,7 +109,7 @@ const Navbar = () => {
             className="sm:hidden block border-2 border-[#633CFF] bg-[#EFEBFF] text-[#633CFF] px-3.5 py-2 w-12 rounded-lg "
           />
         </Link>
-      </div>
+      </nav>
     </section>
   );
 };

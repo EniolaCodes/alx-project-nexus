@@ -233,7 +233,7 @@ const ProfilePage: React.FC = () => {
           links={links}
         />
       </div>
-      <div className="max-w-4xl my-8 bg-white shadow-md rounded-lg p-5 flex-1">
+      <main className="max-w-4xl my-8 bg-white shadow-md rounded-lg p-5 flex-1">
         <h1 className="text-black sm:text-[32px] text-2xl font-bold">
           Profile Details
         </h1>
@@ -366,7 +366,7 @@ const ProfilePage: React.FC = () => {
             </button>
           </div>
         </form>
-      </div>
+      </main>
     </div>
   );
 };

@@ -38,8 +38,8 @@ const MainLayout: FC<MainLayoutProps> = ({
   const boxes = new Array(5).fill(null);
 
   return (
-    <div className="px-28 lg:block hidden bg-white shadow-md rounded-lg p-12">
-      <div className="h-157.75 w-76.75 relative">
+    <section className="px-28 lg:block hidden bg-white shadow-md rounded-lg p-12">
+      <main className="h-157.75 w-76.75 relative">
         <Image
           className="absolute top-0 left-0"
           style={{ width: "90%", height: "auto" }}
@@ -127,8 +127,8 @@ const MainLayout: FC<MainLayoutProps> = ({
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </main>
+    </section>
   );
 };
 

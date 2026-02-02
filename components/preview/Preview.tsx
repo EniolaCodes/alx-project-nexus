@@ -18,6 +18,7 @@ import facebook from "@/public/assets/images/facebook.svg";
 import linkedin from "@/public/assets/images/linkedin.svg";
 import ArrowRight from "@/public/assets/images/arrow-right.svg";
 import { toast } from "react-hot-toast";
+import { Main } from "next/document";
 
 interface Link {
   platform: string;
@@ -106,25 +107,25 @@ const PreviewPage: FC<PreviewProps> = ({ links, imageUrl, email }) => {
   }
 
   return (
-    <div className="min-h-screen w-full bg-gray-100">
+    <section className="min-h-screen w-full bg-gray-100">
       <div className="relative md:bg-[#633CFF] rounded-bl-4xl rounded-br-4xl h-92.5 flex flex-col gap-15 lg:gap-26.5 sm:gap-31.5 z-10">
         <div className="w-full top-0 sm:px-6 sm:py-4">
           <nav className="px-6 py-4 rounded-xl bg-white w-full flex justify-center gap-4 sm:gap-0 sm:justify-between items-center">
             <Link
               href="/links"
-              className="rounded-lg text-[#633CFF] sm:w-fit w-full border border-[#633CFF] bg-white px-[27px] py-[11px] whitespace-nowrap"
+              className="rounded-lg text-[#633CFF] sm:w-fit w-full border border-[#633CFF] bg-white px-6.75 py-2.75 whitespace-nowrap"
             >
               Back to Links
             </Link>
             <button
               onClick={handleShareLink}
-              className="rounded-lg text-white border sm:w-fit w-full border-[#633CFF] bg-[#633CFF] px-[40.5px] sm:px-[27px] py-[11px]"
+              className="rounded-lg text-white border sm:w-fit w-full border-[#633CFF] bg-[#633CFF] px-[40.5px] sm:px-6.75 2.75"
             >
               Share Link
             </button>
           </nav>
         </div>
-        <div className="w-full flex justify-center items-center ">
+        <main className="w-full flex justify-center items-center ">
           <div className="h-fit w-87.25 rounded-3xl md:bg-white flex flex-col py-12 gap-8 items-center">
             <div className="flex flex-col gap-6.25 items-center">
               {profileData.imageUrl ? (
@@ -180,9 +181,9 @@ const PreviewPage: FC<PreviewProps> = ({ links, imageUrl, email }) => {
               ))}
             </div>
           </div>
-        </div>
+        </main>
       </div>
-    </div>
+    </section>
   );
 };
 
