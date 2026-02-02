@@ -68,7 +68,7 @@ const Login = () => {
       <div className="sm:pb-10 pb-5 sm:px-0 px-5">
         <Image src={logo} alt="logo" className="sm:w-full h-auto" priority />
       </div>
-      <div className="border bg-white flex flex-col gap-2 sm:w-119 sm:h-121.5 sm:p-10 px-5 py-12 rounded-md border-white">
+      <main className="border bg-white flex flex-col gap-2 sm:w-119 sm:h-121.5 sm:p-10 px-5 py-12 rounded-md border-white">
         <h2 className="sm:text-[32px] text-2xl text-[#333333] font-bold">
           Login
         </h2>
@@ -136,7 +136,8 @@ const Login = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute top-4 right-3 text-[#737373] hover:text-[#633CFF] transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute top-4 right-3 p-2 text-[#737373] hover:text-[#633CFF] transition-colors"
               >
                 {showPassword ? (
                   <svg
@@ -203,7 +204,7 @@ const Login = () => {
             </h1>
           </div>
         </form>
-      </div>
+      </main>
     </section>
   );
 };

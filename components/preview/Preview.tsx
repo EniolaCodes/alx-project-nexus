@@ -108,7 +108,7 @@ const PreviewPage: FC<PreviewProps> = ({ links, imageUrl, email }) => {
 
   return (
     <section className="min-h-screen w-full bg-gray-100">
-      <main className="relative md:bg-[#633CFF] rounded-bl-4xl rounded-br-4xl h-92.5 flex flex-col gap-15 lg:gap-26.5 sm:gap-31.5 z-10">
+      <div className="relative md:bg-[#633CFF] rounded-bl-4xl rounded-br-4xl h-92.5 flex flex-col gap-15 lg:gap-26.5 sm:gap-31.5 z-10">
         <div className="w-full top-0 sm:px-6 sm:py-4">
           <nav className="px-6 py-4 rounded-xl bg-white w-full flex justify-center gap-4 sm:gap-0 sm:justify-between items-center">
             <Link
@@ -125,7 +125,7 @@ const PreviewPage: FC<PreviewProps> = ({ links, imageUrl, email }) => {
             </button>
           </nav>
         </div>
-        <div className="w-full flex justify-center items-center ">
+        <main className="w-full flex justify-center items-center ">
           <div className="h-fit w-87.25 rounded-3xl md:bg-white flex flex-col py-12 gap-8 items-center">
             <div className="flex flex-col gap-6.25 items-center">
               {profileData.imageUrl ? (
@@ -181,8 +181,8 @@ const PreviewPage: FC<PreviewProps> = ({ links, imageUrl, email }) => {
               ))}
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </div>
     </section>
   );
 };

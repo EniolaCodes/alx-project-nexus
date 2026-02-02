@@ -292,7 +292,7 @@ const CustomizeLinks: NextPage = () => {
 
   return (
     <div className="flex min-h-screen">
-      <div className="bg-gray-100 p-5">
+      <section className="bg-gray-100 p-5">
         <MainLayout
           profilePicture={profilePicture || undefined}
           email={email || undefined}
@@ -301,9 +301,8 @@ const CustomizeLinks: NextPage = () => {
             url: urls[index] || platformDefaultUrls[link.platform] || "",
           }))}
         />
-      </div>
-
-      <section className="bg-gray-100 p-5 flex-1">
+      </section>
+      <main className="bg-gray-100 p-5 flex-1">
         <Head>
           <title>Customize Links</title>
         </Head>
@@ -451,7 +450,7 @@ const CustomizeLinks: NextPage = () => {
             </button>
           </div>
         </main>
-      </section>
+      </main>
     </div>
   );
 };
