@@ -303,11 +303,11 @@ const CustomizeLinks: NextPage = () => {
         />
       </div>
 
-      <div className="bg-gray-100 p-5 flex-1">
+      <section className="bg-gray-100 p-5 flex-1">
         <Head>
           <title>Customize Links</title>
         </Head>
-        <div className="max-w-4xl mx-auto shadow-md rounded-lg p-12 bg-white">
+        <main className="max-w-4xl mx-auto shadow-md rounded-lg p-12 bg-white">
           <h1 className="sm:text-[32px] text-2xl font-bold mb-4 text-black">
             Customize your links
           </h1>
@@ -450,8 +450,8 @@ const CustomizeLinks: NextPage = () => {
               Save
             </button>
           </div>
-        </div>
-      </div>
+        </main>
+      </section>
     </div>
   );
 };
