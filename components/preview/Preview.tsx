@@ -119,7 +119,7 @@ const PreviewPage: FC<PreviewProps> = ({ links, imageUrl, email }) => {
             </Link>
             <button
               onClick={handleShareLink}
-              className="rounded-lg text-white border sm:w-fit w-full border-[#633CFF] bg-[#633CFF] px-[40.5px] sm:px-6.75 2.75"
+              className="rounded-lg text-white border sm:w-fit w-full border-[#633CFF] bg-[#633CFF] hover:border-[#BEADFF] hover:bg-[#BEADFF] hover:shadow-custom-shadow transition-shadow px-6.75 py-2.75 sm:px-6.75 2.75"
             >
               Share Link
             </button>

@@ -84,6 +84,27 @@ Once you deploy to Vercel, you must authorize your new domain in the Firebase Co
 
 ---
 
+---
+
+## Status
+
+![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat&logo=typescript)
+![Firebase](https://img.shields.io/badge/Firebase-Auth%20%26%20Firestore-orange?style=flat&logo=firebase)
+![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat&logo=vercel)
+
+---
+
+## The "Quick Links"
+
+| Resource         | Link                                                                                     |
+| :--------------- | :--------------------------------------------------------------------------------------- |
+| **Live Site**    | [Nexus Demo](https://alx-project-nexus-delta-one.vercel.app/)                            |
+| **Video Demo**   | [YouTube Walkthrough](https://youtu.be/O_AOUBqahjA)                                      |
+| **Presentation** | [Canva Slide Deck](https://www.canva.com/design/DAHAKxtNfnM/RU5s-KQA0TY3ZFiGqc8ccA/edit) |
+
+---
+
 ## Local Development
 
 1. **Clone the repo**:
