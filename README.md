@@ -1,6 +1,6 @@
-# Nexus Link Share
+# DevLinks
 
-**Nexus Link Share** is a high-performance, real-time social link aggregator. Much like Linktree, it allows users to create a centralized profile, customize social media links, and share a sleek, mobile-responsive preview page with the world.
+**DevLinks** is a high-performance, real-time social link aggregator. Much like Linktree, it allows users to create a centralized profile, customize social media links, and share a sleek, mobile-responsive preview page with the world.
 
 ## Features
 
@@ -63,24 +63,24 @@ To ensure data integrity, the project uses two main Firestore collections:
 
 Once you deploy to Vercel, you must authorize your new domain in the Firebase Console. Without this step, Firebase Authentication and certain Firestore operations will be blocked for security reasons.
 
-1. \*\*Copy your Vercel URL\*\*: It should look like your-project-name.vercel.app.
+1. **Copy your Vercel URL**: It should look like your-project-name.vercel.app.
 
-2. \*\*Go to Firebase Console\*\*: Navigate to Authentication > Settings > Authorized Domains.
+2. **Go to Firebase Console**: Navigate to Authentication > Settings > Authorized Domains.
 
-3. \*\*Add Domain\*\*: Click "Add Domain" and paste your Vercel URL.
+3. **Add Domain**: Click "Add Domain" and paste your Vercel URL.
 
-4. \*\*Repeat for Custom Domains\*\*: If you connect a custom domain (e.g., www.yourname.com) to Vercel, repeat this step for that domain as well.
+4.**Repeat for Custom Domains** : If you connect a custom domain (e.g., www.yourname.com) to Vercel, repeat this step for that domain as well.
 
 ---
 
 ## Troubleshooting Guide
 
-| Issue                             | Potential Cause        | Solution                                                                                      |
-| --------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------- |
-| **"Cannot find name onSnapshot"** | Missing imports        | Ensure `onSnapshot` and `doc` are imported from `firebase/firestore`.                         |
-| **Profile data not appearing**    | Document ID mismatch   | Ensure the Document ID in the `profiles` collection matches your **User UID** exactly.        |
-| **Links not grouped together**    | Missing `userId` field | Every document in the `links` collection must have a `userId` field containing your Auth UID. |
-| **Styles/Icons not loading**      | Case sensitivity       | Platform names must match the code exactly: `GitHub`, `LinkedIn`, `YouTube`, `Facebook`.      |
+| Issue                           | Potential Cause        | Solution                                                                                      |
+| ------------------------------- | ---------------------- | --------------------------------------------------------------------------------------------- |
+| **Cannot find name onSnapshot** | Missing imports        | Ensure `onSnapshot` and `doc` are imported from `firebase/firestore`.                         |
+| **Profile data not appearing**  | Document ID mismatch   | Ensure the Document ID in the `profiles` collection matches your **User UID** exactly.        |
+| **Links not grouped together**  | Missing `userId` field | Every document in the `links` collection must have a `userId` field containing your Auth UID. |
+| **Styles/Icons not loading**    | Case sensitivity       | Platform names must match the code exactly: `GitHub`, `LinkedIn`, `YouTube`, `Facebook`.      |
 
 ---
 
